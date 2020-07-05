@@ -7,6 +7,16 @@ import {viewport} from '@airtable/blocks';
 
 const EngineRoom = ({src}) => {
     const [canvas, setCanvas] = useState()
+
+    const onResize = () => {
+        console.log("GotRef")
+        if (engine) {
+            console.log("REsize")
+            engine.resize()
+        }
+    }
+
+
     const [engine, setEngine] = useState()
     useEffect(() => {
         if (canvas) {
@@ -59,21 +69,17 @@ const EngineRoom = ({src}) => {
         }
     }, [src])
 
-    const setCanvasAndSize = (canvas) => {
+    const setCanvasAndObserveSize = (canvas) => {
         if (canvas){
             setCanvas(canvas)
+            let resizeObserver = new ResizeObserver(onResize)
+            resizeObserver.observe(canvas)
         }
     }
 
-    const onResize = () => {
-        if (engine) {
-            engine.resize()
-        }
-    }
     viewport.watch("isFullscreen", onResize)
 
-
-    return <canvas ref={(ref) => {setCanvasAndSize(ref)}} style={{width: "100%", height:"100%"}} ></canvas>
+    return <canvas ref={(ref) => {setCanvasAndObserveSize(ref)}} style={{width: "100%", height:"100%"}} ></canvas>
 }
 
 const createScene = (engine) => {
