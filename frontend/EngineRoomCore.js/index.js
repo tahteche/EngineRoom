@@ -5,13 +5,11 @@ import {viewport} from '@airtable/blocks';
 
 
 
-const EngineRoom = ({src}) => {
+const EngineRoomCore = ({src}) => {
     const [canvas, setCanvas] = useState()
 
     const onResize = () => {
-        console.log("GotRef")
         if (engine) {
-            console.log("REsize")
             engine.resize()
         }
     }
@@ -21,8 +19,6 @@ const EngineRoom = ({src}) => {
     useEffect(() => {
         if (canvas) {
             setEngine(createEngine(canvas))
-            console.log("engine set")
-            console.log(canvas, engine)
         }
     }, [canvas])
 
@@ -31,8 +27,6 @@ const EngineRoom = ({src}) => {
         if (engine) {
             canvas.addEventListener("resize", onResize)
             setScene(createScene(engine))
-            console.log("scene is set")
-            console.log(engine)
         }
     }, [engine])
 
@@ -43,12 +37,8 @@ const EngineRoom = ({src}) => {
             camera.setPosition(new BABYLON.Vector3(5, 5, -5));
             camera.attachControl(canvas, true);
 
-            console.log("loader is set")
-            console.log(scene)
-
             SceneLoader.ImportMesh("", src, undefined, scene,
                 (meshes) => {
-                    console.log("yolo", meshes)
                     scene.createDefaultCameraOrLight(true, true, true);
                     scene.createDefaultEnvironment();
                 }
@@ -91,4 +81,4 @@ const createEngine = (canvas) => {
      return new Engine(canvas)
 }
 
-export default EngineRoom
+export default EngineRoomCore

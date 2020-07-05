@@ -19,7 +19,7 @@ import {
 
 import {useSettings} from './settings';
 import SettingsForm from './SettingsForm';
-import EngineRoom from './EngineRoom.js';
+import EngineRoomCore from './EngineRoomCore.js';
 
 // How this block chooses a preview to show:
 //
@@ -45,7 +45,7 @@ import EngineRoom from './EngineRoom.js';
 //    and uses this URL to construct an embed URL and inserts this URL into
 //    an iframe.
 //
-function UrlPreviewBlock() {
+function EngineRoom() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     useSettingsButton(() => setIsSettingsOpen(!isSettingsOpen));
 
@@ -314,15 +314,13 @@ function RecordPreview({
             //     <Text>Select a cell to see a preview</Text>
             //     {viewSupportedURLsButton}
             // </Fragment>
-            <EngineRoom src="https://models.babylonjs.com/Chair/Chair.obj"></EngineRoom>
+            <EngineRoomCore src="https://models.babylonjs.com/Chair/Chair.obj"></EngineRoomCore>
         );
     } else {
         // Using getCellValueAsString guarantees we get a string back. If
         // we use getCellValue, we might get back numbers, booleans, or
         // arrays depending on the field type.
         const cellValue = selectedRecord.getCellValue(previewField);
-        console.log("cellValue", cellValue)
-
         if (!cellValue) {
             return (
                 <Fragment>
@@ -346,7 +344,7 @@ function RecordPreview({
                 );
             } else {
                 return (
-                    <EngineRoom src={previewUrl}></EngineRoom>
+                    <EngineRoomCore src={previewUrl}></EngineRoomCore>
                 );
             }
         }
@@ -358,7 +356,6 @@ function RecordPreview({
 // 2. an attachment to a file that is one of the supported file types
 // Supported file types: gltf, glb and obj
 const get3DAssetURL = (item) => {
-    console.log("get3DAssetURL")
     if (!item) {
         return null;
     }
@@ -371,7 +368,6 @@ const get3DAssetURL = (item) => {
 
     // Check if url string is pointing to one of the supported file types
     const isSupportedFileType = (url) => {
-        console.log("isSupportedFileType")
         try {
             for (const fileType of Object.keys(fileTypesRegex)) {
                 if(url.match(fileTypesRegex[fileType])) {
@@ -380,7 +376,6 @@ const get3DAssetURL = (item) => {
             }
             return false;
         } catch (error) {
-            console.error("isSupportedFileType", error)
             return false
         }
     }
@@ -401,16 +396,14 @@ const get3DAssetURL = (item) => {
         try {
             // Fails if `item` is not a valid url string
             new URL(item)
-            console.log("get3DAssetURL.try")
             if (isSupportedFileType(item)) {
                 return item
             }
             return null
         } catch (error) {
-            console.error(error)
             return null
         }
     }
 }
 
-initializeBlock(() => <UrlPreviewBlock />);
+initializeBlock(() => <EngineRoom />);
