@@ -310,11 +310,10 @@ function RecordPreview({
         previewField === null
     ) {
         return (
-            // <Fragment>
-            //     <Text>Select a cell to see a preview</Text>
-            //     {viewSupportedURLsButton}
-            // </Fragment>
-            <EngineRoomCore src="https://models.babylonjs.com/Chair/Chair.obj"></EngineRoomCore>
+            <Fragment>
+                <Text>Select a cell to see a preview</Text>
+                {viewSupportedURLsButton}
+            </Fragment>
         );
     } else {
         // Using getCellValueAsString guarantees we get a string back. If
