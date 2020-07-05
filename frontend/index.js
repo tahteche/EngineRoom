@@ -146,13 +146,11 @@ function RecordPreview({
 
     // We use getFieldByIdIfExists because the field might be deleted.
     const selectedField = selectedFieldId ? table.getFieldByIdIfExists(selectedFieldId) : null;
-    // When using a specific field for previews is enabled and that field exists,
-    // use the selectedField
-    const previewField = selectedField;
+
     // Triggers a re-render if the record changes. Preview URL cell value
     // might have changed, or record might have been deleted.
     const selectedRecord = useRecordById(table, selectedRecordId ? selectedRecordId : '', {
-        fields: [previewField],
+        fields: [selectedField],
     });
 
     // Triggers a re-render if the user switches table or view.
@@ -176,9 +174,7 @@ function RecordPreview({
     } else if (
         // selectedRecord will be null on block initialization, after
         // the user switches table or view, or if it was deleted.
-        selectedRecord === null ||
-        // The preview field may have been deleted.
-        previewField === null
+        selectedRecord === null
     ) {
         return (
             <Fragment>
@@ -189,11 +185,11 @@ function RecordPreview({
     } else {
         // Using getCellValue because previews of URLs and Airtable Attachments
         // are supported
-        const cellValue = selectedRecord.getCellValue(previewField);
+        const cellValue = selectedRecord.getCellValue(selectedField);
         if (!cellValue) {
             return (
                 <Fragment>
-                    <Text>The “{previewField.name}” field is empty</Text>
+                    <Text>The “{selectedField.name}” field is empty</Text>
                     {viewSupportedURLsButton}
                 </Fragment>
             );
